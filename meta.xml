@@ -1,6 +1,17 @@
 <meta>
     <info author="author" version="version" name="name" description="description" type="script"/>
 
+    <!-- config -->
+         <!-- share -->
+        <script src="config/share.lua" type="server" />
+        <script src="config/share.lua" type="client" cache="false" />
+
+        <!-- server -->
+        <script src="config/server.lua" type="server" />
+        <!-- client -->
+        <script src="config/client.lua" type="server" />
+
+    <!-- main -->
     <script src="server.lua" type="server" />
     <script src="client.lua" type="client" cache="false" />
     
