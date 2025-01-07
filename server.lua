@@ -125,7 +125,9 @@ function ( thePreviousAccount, theCurrentAccount )
         triggerClientEvent( source, "onClientPlayerLoginGamemode", source )
     else
         -- ผู้เล่นใหม่สมัครสมาชิก
-        setAccountData( theCurrentAccount, "PID", generateRandomID ( 12 ) )
+        local newPID = generateRandomID ( 12 )
+        setAccountData( theCurrentAccount, "PID", newPID )
+        KeyPIDAccounts[ newPID ] = theCurrentAccount
 
         -- สปอว์นผู้เล่น สำหรับสมัครสมาชิก โดยใช้ ข้อมูลฐานข้อมูลเริ่มต้น
         spawnPlayer( source, configServer[ "Default_PositionSpawn" ][ 1 ], configServer[ "Default_PositionSpawn" ][ 2 ], configServer[ "Default_PositionSpawn" ][ 3 ], 0, configServer[ "Default_ModelID" ] )
