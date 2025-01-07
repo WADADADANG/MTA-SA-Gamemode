@@ -25,5 +25,10 @@ givePlayerRegisterElements = {
     
     [ "health" ] = 100,
     [ "armor" ] = 0,
-    [ "skin" ] 0 ,
+    [ "ModelID" ] = configServer[ "Default_ModelID" ],
+}
+
+resetPlayerRespawnElements = {
+    [ "health" ] = 50,
+    [ "armor" ] = 0,
 }
