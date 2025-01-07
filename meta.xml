@@ -11,8 +11,22 @@
         <!-- client -->
         <script src="config/client.lua" type="server" />
 
+    <!-- tools -->
+        <!-- share -->
+        <script src="tools/share.lua" type="server" />
+        <script src="tools/share.lua" type="client" cache="false" />
+
+        <!-- server -->
+        <script src="tools/server.lua" type="server" />
+        <!-- client -->
+        <script src="tools/client.lua" type="server" />
     <!-- main -->
     <script src="server.lua" type="server" />
     <script src="client.lua" type="client" cache="false" />
+
+    <!-- export -->
+    <export function="isPlayerWaitingRespawn" type="server" />
+    <export function="isPlayerDowning" type="server" />
     
+    <file src="inventory/images/*.png"/>
 </meta>
