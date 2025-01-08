@@ -20,6 +20,16 @@
         <script src="tools/server.lua" type="server" />
         <!-- client -->
         <script src="tools/client.lua" type="server" />
+
+
+    <!-- inventory -->
+        <!-- server -->
+        <script src="inventory/server.lua" type="server" />
+
+    <!-- weapon -->
+        <!-- server -->
+        <script src="weapon/server.lua" type="server" />
+
     <!-- main -->
     <script src="server.lua" type="server" />
     <script src="client.lua" type="client" cache="false" />
@@ -28,5 +38,8 @@
     <export function="isPlayerWaitingRespawn" type="server" />
     <export function="isPlayerDowning" type="server" />
     
-    <file src="inventory/images/*.png"/>
+    <file src="files/items/*.png"/>
+    <file src="files/sounds/*.mp3"/>
+    <file src="files/sounds/*.wav"/>
+    
 </meta>

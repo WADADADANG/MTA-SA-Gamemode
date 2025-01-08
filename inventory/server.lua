@@ -55,6 +55,8 @@ end
 
 addEventHandler( "onPlayerInventoryItemUsed", resourceRoot, 
 function ( itemID, amount )
+    if client then return end
+
     local inventoryData = inventoryItems[ itemID ]
     if inventoryData then
 
@@ -71,7 +73,6 @@ end
 addEvent( "onPlayerGiveStatusElementEating", true )
 addEventHandler( "onPlayerGiveStatusElementEating", resourceRoot, 
 function ( itemID, amount, statusElement, value )
-  
     if client then return end
 
     if not itemID then return end
@@ -88,6 +89,26 @@ function ( itemID, amount, statusElement, value )
             end
             setElementData( source, statusElement, status )
         end
+    end
+
+end
+)
+
+addEvent( "onPlayerUsingWeapon", true )
+addEventHandler( "onPlayerUsingWeapon", resourceRoot, 
+function ( itemID )
+  
+    if client then return end
+
+    local currentWeapon = getElementData( source, "currentWeapon" )
+    if currentWeapon then
+        if currentWeapon == itemID then
+            setPlayerWeaponRemove( source, itemID )
+        else
+            setPlayerWeaponRearm( source, itemID )
+        end
+    else
+        setPlayerWeaponRearm( source, itemID )
     end
 
 end

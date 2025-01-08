@@ -1,4 +1,4 @@
-newEvent = { "onPlayerLoginGamemode", "onPlayerRegisterGamemode", "onPlayerRespawned", "onPlayerPlayerDowned", "onPlayerDead", "onPlayerInventoryItemUsed" } -- ตารางสร้างเหตุการณ์ใหม่
+newEvent = { "onPlayerLoginGamemode", "onPlayerRegisterGamemode", "onPlayerRespawned", "onPlayerPlayerDowned", "onPlayerDead", "onPlayerInventoryItemUsed", "onPlayerWeaponRearmed", "onPlayerWeaponRemoved", "onPlayerWeaponSwitched" } -- ตารางสร้างเหตุการณ์ใหม่
 for i, event in ipairs( newEvent ) do
     addEvent( event, true ) -- สร้างเหตุการณ์ใหม่
 end

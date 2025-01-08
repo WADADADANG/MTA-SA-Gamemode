@@ -14,6 +14,13 @@ statusLimitElements = {
     [ "blood" ] = 100,
 }
 
+sounds_effect = {
+    [ "equip1" ] = "files/sounds/equip1.wav",
+    [ "equip2" ] = "files/sounds/equip2.wav",
+    [ "equip3" ] = "files/sounds/equip3.wav",
+    [ "equip4" ] = "files/sounds/equip4.mp3",
+}
+
 inventoryItems = {
     [ "food_001" ] = { itemName = "Apple", weight = 1, itemUsageLoss = 1, path_image = ":" .. resourceName .. "/inventory/images/food_001.png", cooldown = { name = "cooldown_food", interval = 4 }, event = { name = "onPlayerGiveStatusElementEating", arg = { "food", 50 } }, frozen = 0, anim = { interval = 1, arg = { "FOOD", "EAT_Burger", -1, false, false, nil, false } } },
     [ "food_002" ] = { itemName = "Blueberries", weight = 1, itemUsageLoss = 1, path_image = ":" .. resourceName .. "/inventory/images/food_002.png", cooldown = { name = "cooldown_food", interval = 4 }, event = { name = "onPlayerGiveStatusElementEating", arg = { "food", 50 } }, frozen = 0, anim = { interval = 1, arg = { "FOOD", "EAT_Burger", -1, false, false, nil, false } } },
@@ -30,10 +37,10 @@ inventoryItems = {
     [ "melee_001" ] = { 
         itemName = "Moon Flame", weight = 1, path_image = ":" .. resourceName .. "/inventory/images/melee_001.png", 
         weapon = { 
-            weaponType = "melee", weapon_id = 8, emotion = "knife", sound_emotion = { [1] = "sword-swing-01", [2] = "sword-swing-02", [3] = "sword-swing-02" }, modelid = 50001, damage = 20,
-            rearm = { path_sound_effect = sounds_effect["equip3"], bone = 25, volume = 0.6, timer = 1 }, 
-            remove = { path_sound_effect = sounds_effect["equip3"], bone = 25, volume = 0.4, timer = 1 },
-            switch = { path_sound_effect = sounds_effect["equip4"], bone = 25, volume = 0.4, timer = 1 },
+            weaponType = "melee", weapon_id = 8, emotion = "knife", sound_emotion = { [1] = "sword-swing-01", [2] = "sword-swing-02", [3] = "sword-swing-02" }, model_scale = 1, modelid = 50001, damage = 20,
+            [ "rearm" ] = { path_sound = sounds_effect["equip3"], bone = 25, volume = 0.6, max_distance = 20, min_distance = 1, interval = 1 },
+            [ "remove" ] = { path_sound = sounds_effect["equip3"], bone = 25, volume = 0.4, max_distance = 20, min_distance = 1, interval = 1 },
+            [ "switch" ] = { path_sound = sounds_effect["equip4"], bone = 25, volume = 0.4, max_distance = 20, min_distance = 1, interval = 1 },
         }, 
         cooldown = { name = "cooldown_weapon", timer = 1 }, 
         event = { name = "onPlayerUsingWeapon", arg = { } },
@@ -185,7 +192,7 @@ function getWeaponDataByWeaponID ( player, weaponID )
     return false
 end
 
-function getWeaponAmnoByWeaponID ( player, weaponID )
+function getPlayerWeaponAmnoByWeaponID ( player, weaponID )
     local weapData, itemID = getWeaponDataByWeaponID ( player, weaponID )
     if weapData then
         local ammoID = weapData.ammoID
