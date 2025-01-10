@@ -1,5 +1,5 @@
 
-
+addEvent( "onPlayerInventoryUsingItem", true )
 addEventHandler( "onPlayerInventoryUsingItem", resourceRoot, 
 function ( itemID, amount )
     if not client then return end
@@ -9,7 +9,7 @@ function ( itemID, amount )
     local inventoryData = inventoryItems[ itemID ]
     if inventoryData then
         local qty = getElementData( client, itemID ) or 0
-        if qty and qty > = amount then
+        if qty and qty >= amount then
 
             if inventoryData.cooldown then
                 local cooldown = getElementData( client, inventoryData.cooldown.name ) or 0
@@ -40,7 +40,7 @@ function ( itemID, amount )
                 local event_name = inventoryData.event.name
                 local event_args = inventoryData.event.arg
                 if event_name and event_args and type( event_args ) == "table" then
-                    triggerEvent( event_name, client, itemID, amount, unpack( event_args.arg ) )
+                    triggerEvent( event_name, client, itemID, amount, unpack( event_args ) )
                 end
             end
 
@@ -53,7 +53,7 @@ function ( itemID, amount )
 end
 )
 
-addEventHandler( "onPlayerInventoryItemUsed", resourceRoot, 
+addEventHandler( "onPlayerInventoryItemUsed", root, 
 function ( itemID, amount )
     if client then return end
 
@@ -71,7 +71,7 @@ end
 
 -- เหตุการณ์เมื่อผู้เล่นใช้ไอเทม และได้รับสถานะ ( ตัวอย่างเช่น การกินอาหาร จะได้รับสถานะอาหารเพิ่ม ) เหตุการนี้ ส่งมาจาก server เท่านั้น
 addEvent( "onPlayerGiveStatusElementEating", true )
-addEventHandler( "onPlayerGiveStatusElementEating", resourceRoot, 
+addEventHandler( "onPlayerGiveStatusElementEating", root, 
 function ( itemID, amount, statusElement, value )
     if client then return end
 
@@ -95,9 +95,8 @@ end
 )
 
 addEvent( "onPlayerUsingWeapon", true )
-addEventHandler( "onPlayerUsingWeapon", resourceRoot, 
+addEventHandler( "onPlayerUsingWeapon", root, 
 function ( itemID )
-  
     if client then return end
 
     local currentWeapon = getElementData( source, "currentWeapon" )

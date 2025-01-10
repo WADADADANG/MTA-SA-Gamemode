@@ -19,16 +19,36 @@
         <!-- server -->
         <script src="tools/server.lua" type="server" />
         <!-- client -->
-        <script src="tools/client.lua" type="server" />
+        <script src="tools/client.lua" type="client" cache="false" />
 
 
     <!-- inventory -->
         <!-- server -->
         <script src="inventory/server.lua" type="server" />
+        <!-- client -->
+        <script src="inventory/client.lua" type="client" cache="false" />
 
     <!-- weapon -->
         <!-- server -->
         <script src="weapon/server.lua" type="server" />
+        <!-- client -->
+        <script src="weapon/client.lua" type="client" cache="false" />
+
+    <!-- gathering -->
+        <!-- server -->
+        <script src="gathering/server.lua" type="server" />
+        <!-- client -->
+        <script src="gathering/client.lua" type="client" cache="false" />
+
+    <!-- nametag -->
+        <!-- client -->
+        <script src="nametag/client.lua" type="client" cache="false" />
+        
+    <!-- loot -->
+        <!-- server -->
+        <script src="loot/server.lua" type="server" />
+        <!-- client -->
+        <script src="loot/client.lua" type="client" cache="false" />
 
     <!-- main -->
     <script src="server.lua" type="server" />
@@ -42,4 +62,5 @@
     <file src="files/sounds/*.mp3"/>
     <file src="files/sounds/*.wav"/>
     
+    <min_mta_version server="1.6.0-9.21765"/>
 </meta>

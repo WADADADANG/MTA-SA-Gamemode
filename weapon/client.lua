@@ -50,3 +50,63 @@ function ( player, itemID )
     playSoundWeapon3D ( player, itemID, "switch" )
 end
 )
+
+function isPlayerInGround ( player )
+
+    for i,state in ipairs( { "jump", "crouch" } ) do
+        if getPedControlState( player, state ) then
+            return false
+        end
+    end
+
+    if isPedInVehicle( player ) or isElementInWater( player ) then
+        return false
+    end
+
+    return isPedOnGround ( player )
+end
+
+
+local lastHitTime = 0
+local hitCooldown = 500
+
+function onClientPlayerWeaponFire ( )
+    if isCursorShowing( ) then return end
+
+    local player = getLocalPlayer(  )
+    local weaponID = getPlayerWeaponID ( player )
+    if weaponID then
+        if isPlayerInGround ( player ) then
+
+            if getTickCount(  ) > lastHitTime then
+                local px, py, pz = getElementPosition( player )
+                local tx, ty, tz = getPedTargetEnd( player )
+                local hitElement, x, y, z = processLineOfSight ( px, py, pz, tx, ty, tz )
+                setTimer( triggerEvent, 200, 1, "onClientonPlayerWeaponFired", player, weaponID, x, y, z, hitElement )
+
+                lastHitTime = getTickCount(  ) + hitCooldown
+            end
+
+        end
+    end
+
+end
+
+addEventHandler( "onClientKey", root,
+function ( button, press )
+    if button == "mouse2" and press then
+        setPedControlState ( getLocalPlayer(  ), "fire", false )
+        setPedAnalogControlState( getLocalPlayer(  ), "fire", 0 )
+        onClientPlayerWeaponFire( )
+    end
+end
+)
+
+addEvent( "onClientonPlayerWeaponFired", true )
+addEventHandler( "onClientonPlayerWeaponFired", root, 
+function ( weaponID, tx, ty, tz, hitElement )
+    setPedControlState ( source, "fire", true )
+    setPedAnalogControlState( source, "fire", 1 )
+    outputChatBox( "onClientonPlayerWeaponFired " .. tostring( weaponID ) .. " " .. tostring( tx ) .. " " .. tostring( ty ) .. " " .. tostring( tz ) .. " " .. tostring( hitElement ) )
+end
+)

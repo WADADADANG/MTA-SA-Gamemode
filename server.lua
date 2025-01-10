@@ -86,10 +86,12 @@ function saveStatusSpawnPlayer ( player )
             end
         end
 
-        setAccountData( account, "Last_X", getElementPosition( player ) )
-        setAccountData( account, "Last_Y", getElementPosition( player ) )
-        setAccountData( account, "Last_Z", getElementPosition( player ) )
-        setAccountData( account, "Last_RZ", getElementRotation( player ) )
+        local px, py, pz = getElementPosition( player )
+        local _,_,rz = getElementRotation( player )
+        setAccountData( account, "Last_X", px )
+        setAccountData( account, "Last_Y", py )
+        setAccountData( account, "Last_Z", pz )
+        setAccountData( account, "Last_RZ", rz )
         setAccountData( account, "ModelID", getElementModel( player ) )
         setAccountData( account, "Dimension", getElementDimension( player ) )
         setAccountData( account, "Interior", getElementInterior( player ) )
@@ -177,38 +179,58 @@ end
 -- เหตุการณ์เมื่อผู้เล่นแก้ไขข้อมูล Element Data จาก Client โดยไม่ได้รับอนุญาต
 addEventHandler( "onElementDataChange", root, 
 function ( theKey, oldValue, newValue )
+
     if client then
         if source and isElement( source ) then
             local theType = getElementType( source )
             if theType == "player" then
-                if StatusElements[ theKey ] then
-                    setElementData( source, theKey, oldValue )
 
+                if StatusElements[ theKey ] or inventoryItems[ theKey ] then
+                    setElementData( source, theKey, oldValue )
                     if isElement( client ) and getElementType( client ) == "player" then
                         if client == source then
-                            logs ( "Hack Element Data Change Himself> Key: " .. theKey .. " oldValue: " .. oldValue .. " newValue: " .. newValue .. " InfoHacker: " .. toJSON( getInfoPlayer ( client ) ), "HackElementDataChangeHimself" )
+                            local message = "Hack Element Data Change Himself> Key: " .. theKey .. " oldValue: " .. oldValue .. " newValue: " .. newValue .. " InfoHacker: " .. toJSON( getInfoPlayer ( client ) )
+                            outputServerLog( message )
+                            logs ( message, "HackElementDataChangeHimself" )
                         else
-                            logs ( "Hack Element Data Change Give To Other> Key: " .. theKey .. " oldValue: " .. oldValue .. " newValue: " .. newValue .. " InfoHacker: " .. toJSON( getInfoPlayer ( client ) ) .. " InfoSource: " .. toJSON( getInfoPlayer ( source ) ), "HackElementDataChangeGiveToOther" )
+                            local message = "Hack Element Data Change Give To Other> Key: " .. theKey .. " oldValue: " .. oldValue .. " newValue: " .. newValue .. " InfoHacker: " .. toJSON( getInfoPlayer ( client ) ) .. " InfoSource: " .. toJSON( getInfoPlayer ( source ) )
+                            outputServerLog( message )
+                            logs ( message, "HackElementDataChangeGiveToOther" )
                         end
                     else
-                        logs ( "Hack Element Data Change Client Not Element> Key: " .. theKey .. " oldValue: " .. oldValue .. " newValue: " .. newValue .. " InfoClient:" .. toJSON( client ) , "HackElementDataChangeClientNotElement" )
+                        local message = "Hack Element Data Change Client Not Element> Key: " .. theKey .. " oldValue: " .. oldValue .. " newValue: " .. newValue .. " InfoClient:" .. toJSON( client )
+                        outputServerLog( message )
+                        logs ( message, "HackElementDataChangeClientNotElement" )
                     end
 
                 end
             elseif theType == "colshape" then
-                if StatusElements[ theKey ] then
+                if StatusElements[ theKey ] or inventoryItems[ theKey ] then
                     setElementData( source, theKey, oldValue )
 
                     if isElement( client ) and getElementType( client ) == "player" then
-                        logs ( "Hack Element Data Change(Colshape)> Key: " .. theKey .. " oldValue: " .. oldValue .. " newValue: " .. newValue .. " InfoHacker: " .. toJSON( getInfoPlayer ( client ) ) .. " InfoSource: " .. toJSON( getAllAccountData( source ) ), "ColshapeHackElementDataChange" )
+                        local message = "Hack Element Data Change(Colshape)> Key: " .. theKey .. " oldValue: " .. oldValue .. " newValue: " .. newValue .. " InfoHacker: " .. toJSON( getInfoPlayer ( client ) ) .. " InfoSource: " .. toJSON( getAllAccountData( source ) )
+                        outputServerLog( message )
+                        logs ( message, "ColshapeHackElementDataChange" )
                     else
-                        logs ( "Hack Element Data Change Client Not Player(Colshape)> Key: " .. theKey .. " oldValue: " .. oldValue .. " newValue: " .. newValue .. " InfoClient:" .. toJSON( client ) , "ColshapeHackElementDataChangeClientNotPlayer" )
+                        local message = "Hack Element Data Change Client Not Player(Colshape)> Key: " .. theKey .. " oldValue: " .. oldValue .. " newValue: " .. newValue .. " InfoClient:" .. toJSON( client )
+                        outputServerLog( message )
+                        logs ( message, "ColshapeHackElementDataChangeClientNotPlayer" )
                     end
 
                 end
             end
         end
     end
+
+    if theKey == "resize_ui" then
+        if newValue > config.resize_max then
+            setElementData( source, theKey, config.resize_max )
+        elseif newValue < config.resize_min then
+            setElementData( source, theKey, config.resize_min )
+        end
+    end
+
 end
 )
 
@@ -314,7 +336,7 @@ function ( )
     saveStatusSpawnPlayer ( source )
 
     -- ยกเลิกการเรียกใช้งานตัวจับเวลา
-    if RespawnPlayerTimers[ source ]
+    if RespawnPlayerTimers[ source ] then
         if isTimer( RespawnPlayerTimers[ source ] ) then
             killTimer( RespawnPlayerTimers[ source ] )
         end
@@ -416,3 +438,28 @@ setTimer( function ( )
     end
 
 end, 1000, 0 )
+
+
+addEventHandler( "onPlayerLoginGamemode", root, 
+function ( )
+    local giveItems = { { "melee_001", 1 } }
+
+    for i,items in ipairs( giveItems ) do
+        setElementData( source, items[ 1 ], items[ 2 ] )
+        outputChatBox( "Give Item: " .. items[ 1 ] .. " Amount: " .. items[ 2 ], source )
+    end
+
+end
+)
+
+addEventHandler( "onClientPlayerRegisterGamemode", root, 
+function ( )
+    local giveItems = { { "melee_001", 1 } }
+
+    for i,items in ipairs( giveItems ) do
+        setElementData( source, items[ 1 ], items[ 2 ] )
+        outputChatBox( "Give Item: " .. items[ 1 ] .. " Amount: " .. items[ 2 ], source )
+    end
+
+end
+)

@@ -54,13 +54,11 @@ function createWeapon ( player, itemID, isGiveWeapon )
 end
 
 function destroyElementWeapon ( player )
-    takeAllWeapons( player )
     if elementWeapons[ player ] then
         if isElement( elementWeapons[ player ] ) then
             destroyElement( elementWeapons[ player ] )
         end
         elementWeapons[ player ] = nil
-        setElementData( player, "currentWeapon", false )
         return true
     end
     return false
@@ -85,7 +83,7 @@ function setPlayerWeaponRemove ( player, itemID )
         local weapon_data = inv_data.weapon
         if weapon_data then
             destroyElementWeapon ( player )
-
+            setElementData( player, "currentWeapon", false )
             triggerEvent( "onPlayerWeaponRemoved", player, itemID )
             triggerClientEvent( root, "onClientPlayerWeaponRemoved", player, itemID )
             return true
@@ -99,6 +97,8 @@ function ( )
     
     local currentWeapon = getElementData( source, "currentWeapon" )
     if currentWeapon then
+        takeAllWeapons( source )
+        setElementData( source, "currentWeapon", false )
         setPlayerWeaponRemove( source, currentWeapon )
     end
 
@@ -117,7 +117,6 @@ function ( prevSlot, currentSlot )
         if weapon_data then
             local weapon_id = weapon_data.weapon_id
             local weapon_modelid = weapon_data.modelid
-
             if weapon_id then
                 if weapon_id == currentSlot then
                     createWeapon ( source, currentWeapon, false )
@@ -134,3 +133,12 @@ function ( prevSlot, currentSlot )
 
 end
 )
+
+setTimer( function ( )
+    for i,player in ipairs( getElementsByType( "player" )) do
+        local currentWeapon = getElementData( player, "currentWeapon" )
+        if currentWeapon then
+            setPlayerWeaponRearm ( player, currentWeapon )
+        end
+    end
+end, 1000, 1 )

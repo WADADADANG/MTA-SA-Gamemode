@@ -1,5 +1,10 @@
 resourceName = getResourceName( getThisResource( ) )
 
+config = {}
+config.resize = 1
+config.resize_max = 1.5
+config.resize_min = 0.5
+
 cooldownElements = {
     [ "cooldown_food" ] = true,
     [ "cooldown_thirst" ] = true,
@@ -42,10 +47,22 @@ inventoryItems = {
             [ "remove" ] = { path_sound = sounds_effect["equip3"], bone = 25, volume = 0.4, max_distance = 20, min_distance = 1, interval = 1 },
             [ "switch" ] = { path_sound = sounds_effect["equip4"], bone = 25, volume = 0.4, max_distance = 20, min_distance = 1, interval = 1 },
         }, 
-        cooldown = { name = "cooldown_weapon", timer = 1 }, 
+        cooldown = { name = "cooldown_weapon", interval = 1 }, 
         event = { name = "onPlayerUsingWeapon", arg = { } },
     },
 
+}
+
+gatheringConfig = {}
+gatheringConfig.respawnMining = 1000 * 60 * 10
+gatheringConfig.respawnWood = 1000 * 60 * 10
+
+gatheringConfig.Mining = {
+    { modelID = 1304, name = "Rock", model_height = 0.4, display_height = 1, position = { 79, 15, -0.390625 } },
+}
+
+gatheringConfig.CuttingWood = {
+    { modelID = 622, name = "Tree", model_height = 1.5, display_height = 2, position = { -96, -172, 1.3128939 } },
 }
 
 damageSpecial = {
@@ -264,3 +281,11 @@ function getWeaponDamage ( itemID )
     return 0
 end
 
+function getPlayerWeaponID ( player )
+    local weaponID = getPedWeapon( player )
+    local weapData, itemID = getWeaponDataByWeaponID ( player, weaponID )
+    if weapData and itemID then
+        return itemID
+    end
+    return false
+end
